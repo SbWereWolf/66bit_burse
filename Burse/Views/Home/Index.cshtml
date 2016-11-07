@@ -1,0 +1,235 @@
+﻿
+@model Burse.Models.BurseItemOverview
+
+@{
+    if (ViewBag != null)
+    {
+        ViewBag.Title = "Burse";
+    }
+}
+
+<div class="container">
+    <div class="row">
+        @if (Model != null)
+        {
+            <div class="panel panel-primary text-center">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        Сообщение
+                    </h3>
+                </div>
+
+                <div class="panel-body">
+                    @Model.EventMessage
+                </div>
+            </div>
+
+        }
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            @using (Html.BeginForm("AddBuyOrder", "Home", FormMethod.Post, new { @class = "form-horizontal", id = "AddBuyOrder" }))
+            {
+                <fieldset>
+                    <legend>Разместить ордер на покупку</legend>
+                    <div class="form-group">
+                        <label class="control-label" for="BuyPrice">Цена </label>
+                        <input type="number" class="form-control" id="BuyPrice" placeholder="в рублях">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="NumbersToBuy">Количество </label>
+                        <input type="number" class="form-control" id="NumbersToBuy" placeholder="в штуках">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="BuyComment">Комментарий </label>
+                        <input type="text" class="form-control" id="BuyComment" placeholder="Комментарий к покупке">
+                    </div>
+                </fieldset>
+                    <div class="form-group">
+                        <input type="reset" name="ResetBuyForm" class="btn btn-danger" />
+                        <input type="submit" value="Купить" class="btn btn-success" />
+                    </div>
+                    <table class="table table-condensed table-hover table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="BuyDate">
+                                    Дата покупки
+                                </th>
+                                <th class="BuyPrice">
+                                    Цена покупки
+                                </th>
+                                <th class="NumbersToBuy">
+                                    Количество для покупки
+                                </th>
+                                <th class="BuyComment">
+                                    Комментарий покупки
+                                </th>
+                            </tr>
+
+                        </thead>
+                        <tbody>
+                            @if (Model?.BuyOrders != null)
+                {
+                    foreach (var record in Model.BuyOrders)
+                    {
+                        if (record != null)
+                        {
+                                        <tr>
+                                            <td class="BuyDate">
+                                                @record.BuyDate
+                                            </td>
+                                            <td class="BuyPrice">
+                                                @record.BuyPrice
+                                            </td>
+                                            <td class="NumbersToBuy">
+                                                @record.NumbersToBuy
+                                            </td>
+                                            <td class="BuyComment">
+                                                @record.BuyComment
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            }
+                        </tbody>
+                    </table>
+            }
+        </div>
+        <div class="col-md-6">
+            @using (Html.BeginForm("AddSellOrder", "Home", FormMethod.Post, new { @class = "form-horizontal", id = "AddSellOrder" }))
+            {
+                <fieldset>
+                    <legend>Разместить ордер на продажу</legend>
+                    <div class="form-group">
+                        <label class="control-label" for="SellPrice">Цена </label>
+                        <input type="number" class="form-control" id="SellPrice" placeholder="в рублях">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="NumbersToSell">Количество </label>
+                        <input type="number" class="form-control" id="NumbersToSell" placeholder="в штуках">
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" for="SellComment">Комментарий </label>
+                        <input type="text" class="form-control" id="SellComment" placeholder="Комментарий к продаже">
+                    </div>
+                </fieldset>
+                    <div class="form-group">
+                        <input type="reset" name="ResetSellForm" class="btn btn-danger" />
+                        <input type="submit" value="Продать" class="btn btn-success" />
+                    </div>
+            }
+            <table class="table table-condensed table-hover table-bordered">
+                <thead>
+                    <tr>
+                        <th class="SellDate">
+                            Дата продажи
+                        </th>
+                        <th class="SellPrice">
+                            Цена продажи
+                        </th>
+                        <th class="NumbersToSell">
+                            Количество для продажи
+                        </th>
+                        <th class="SellComment">
+                            Комментарий продажи
+                        </th>
+                    </tr>
+
+                </thead>
+                <tbody>
+                    @if (Model?.SellOrders != null)
+            {
+                foreach (var record in Model.SellOrders)
+                {
+                    if (record != null)
+                    {
+                                <tr>
+                                    <td class="SellDate">
+                                        @record.SellDate
+                                    </td>
+                                    <td class="SellPrice">
+                                        @record.SellPrice
+                                    </td>
+                                    <td class="NumbersToSell">
+                                        @record.NumbersToSell
+                                    </td>
+                                    <td class="SellComment">
+                                        @record.SellComment
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <table class="table table-condensed table-hover table-bordered">
+            <thead>
+                <tr>
+                    <th class="CompleteDate">
+                        Выполнено
+                    </th>
+                    <th class="BuyDate">
+                        Покупка
+                    </th>
+                    <th class="SellDate">
+                        Продажа
+                    </th>
+                    <th class="Price">
+                        Цена
+                    </th>
+                    <th class="ItemsNumber">
+                        Количество
+                    </th>
+                    <th class="BuyComment">
+                        Комментарий покупки
+                    </th>
+                    <th class="SellComment">
+                        Комментарий продажи
+                    </th>
+                </tr>
+
+            </thead>
+            <tbody>
+                @if (Model?.Transactions != null)
+                {
+                    foreach (var record in Model.Transactions)
+                    {
+                        if (record == null)
+                        {
+                            continue;
+                        }
+                        <tr>
+                            <td class="CompleteDate">
+                                @record.CompleteDate
+                            </td>
+                            <td class="BuyDate">
+                                @record.BuyDate
+                            </td>
+                            <td class="SellDate">
+                                @record.SellDate
+                            </td>
+                            <td class="TransactionPrice">
+                                @record.TransactionPrice
+                            </td>
+                            <td class="NumbersToTransaction">
+                                @record.NumbersToTransaction
+                            </td>
+                            <td class="BuyComment">
+                                @record.BuyComment
+                            </td>
+                            <td class="SellComment">
+                                @record.SellComment
+                            </td>
+
+                        </tr>
+                    }
+                }
+            </tbody>
+        </table>
+
+    </div>
+</div>
