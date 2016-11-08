@@ -7,7 +7,7 @@ namespace BusinessLogicLayer
     public class BuyOrder
     {
         public long? Id { get; set; }
-        public DateTime? BuyDate { get; set; }
+        public DateTimeOffset? BuyDate { get; set; }
         public decimal? BuyPrice { get; set; }
         public long? NumbersToBuy { get; set; }
         public string BuyComment { get; set; }
@@ -57,6 +57,64 @@ namespace BusinessLogicLayer
 
             var result = buyOrdersList.ToArray();
             return result;
+        }
+
+        public void Buy()
+        {
+            BuyDate = DateTimeOffset.Now;
+
+            var sellOrders = SellOrder.GetWithPriceLessOrEqual(BuyPrice);
+            if (sellOrders != null)
+            {
+                foreach (var sellOrder in sellOrders)
+                {
+                    var numbersToBuy = NumbersToBuy;
+
+                    if (sellOrder != null && numbersToBuy > 0 )
+                    {
+                        var numbersToSell = sellOrder.NumbersToSell;
+
+                        var numbersToTransaction = numbersToBuy < numbersToSell ? numbersToBuy : numbersToSell;
+                        numbersToSell -= numbersToTransaction;
+                        numbersToBuy -= numbersToTransaction;
+
+                        var transaction = new Transaction
+                        {
+                            BuyDate = BuyDate,
+                            SellDate = sellOrder.SellDate,
+                            BuyComment = BuyComment,
+                            SellComment = sellOrder.SellComment,
+                            CompleteDate = DateTimeOffset.Now,
+                            NumbersToTransaction = numbersToTransaction,
+                            TransactionPrice = sellOrder.SellPrice
+                        };
+                        transaction.Add();
+
+                        NumbersToBuy = numbersToBuy;
+                        sellOrder.NumbersToSell = numbersToSell;
+
+                        sellOrder.Save();
+                    }
+                }
+            }
+
+            if (NumbersToBuy > 0 )
+            {
+                Add();
+            }
+        }
+
+        private void Add()
+        {
+            var newOrder = new BuyOrders
+            {
+                BuyComment = BuyComment,
+                BuyDate = DateTimeOffset.Now,
+                BuyPrice = BuyPrice,
+                NumbersToBuy = NumbersToBuy
+            };
+
+            newOrder.Insert();
         }
     }
 }

@@ -36,9 +36,9 @@ namespace Burse.LinqToMSSql
     partial void InsertSellOrder(SellOrder instance);
     partial void UpdateSellOrder(SellOrder instance);
     partial void DeleteSellOrder(SellOrder instance);
-    partial void InsertTransaction(Transaction instance);
-    partial void UpdateTransaction(Transaction instance);
-    partial void DeleteTransaction(Transaction instance);
+    partial void InsertBurseTransaction(BurseTransaction instance);
+    partial void UpdateBurseTransaction(BurseTransaction instance);
+    partial void DeleteBurseTransaction(BurseTransaction instance);
     #endregion
 		
 		public BurseMSSqlDataContext() : 
@@ -87,19 +87,11 @@ namespace Burse.LinqToMSSql
 			}
 		}
 		
-		public System.Data.Linq.Table<Transaction> Transactions
+		public System.Data.Linq.Table<BurseTransaction> BurseTransactions
 		{
 			get
 			{
-				return this.GetTable<Transaction>();
-			}
-		}
-		
-		public System.Data.Linq.Table<TransactionsOverview_V> TransactionsOverview_Vs
-		{
-			get
-			{
-				return this.GetTable<TransactionsOverview_V>();
+				return this.GetTable<BurseTransaction>();
 			}
 		}
 	}
@@ -120,8 +112,6 @@ namespace Burse.LinqToMSSql
 		
 		private string _BuyComment;
 		
-		private EntitySet<Transaction> _Transactions;
-		
     #region Extensibility Method Definitions
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -140,11 +130,10 @@ namespace Burse.LinqToMSSql
 		
 		public BuyOrder()
 		{
-			this._Transactions = new EntitySet<Transaction>(new Action<Transaction>(this.attach_Transactions), new Action<Transaction>(this.detach_Transactions));
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="BigInt NOT NULL", IsPrimaryKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="BigInt NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public long Id
 		{
 			get
@@ -244,19 +233,6 @@ namespace Burse.LinqToMSSql
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BuyOrder_Transaction", Storage="_Transactions", ThisKey="Id", OtherKey="BuyOrder")]
-		public EntitySet<Transaction> Transactions
-		{
-			get
-			{
-				return this._Transactions;
-			}
-			set
-			{
-				this._Transactions.Assign(value);
-			}
-		}
-		
 		public event PropertyChangingEventHandler PropertyChanging;
 		
 		public event PropertyChangedEventHandler PropertyChanged;
@@ -276,18 +252,6 @@ namespace Burse.LinqToMSSql
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
 		}
-		
-		private void attach_Transactions(Transaction entity)
-		{
-			this.SendPropertyChanging();
-			entity.BuyOrder1 = this;
-		}
-		
-		private void detach_Transactions(Transaction entity)
-		{
-			this.SendPropertyChanging();
-			entity.BuyOrder1 = null;
-		}
 	}
 	
 	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.SellOrders")]
@@ -298,15 +262,13 @@ namespace Burse.LinqToMSSql
 		
 		private long _Id;
 		
-		private string _SellDate;
+		private System.Nullable<System.DateTimeOffset> _SellDate;
 		
-		private string _SellPrice;
+		private System.Nullable<decimal> _SellPrice;
 		
-		private string _NumbersToSell;
+		private System.Nullable<long> _NumbersToSell;
 		
 		private string _SellComment;
-		
-		private EntitySet<Transaction> _Transactions;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -314,11 +276,11 @@ namespace Burse.LinqToMSSql
     partial void OnCreated();
     partial void OnIdChanging(long value);
     partial void OnIdChanged();
-    partial void OnSellDateChanging(string value);
+    partial void OnSellDateChanging(System.Nullable<System.DateTimeOffset> value);
     partial void OnSellDateChanged();
-    partial void OnSellPriceChanging(string value);
+    partial void OnSellPriceChanging(System.Nullable<decimal> value);
     partial void OnSellPriceChanged();
-    partial void OnNumbersToSellChanging(string value);
+    partial void OnNumbersToSellChanging(System.Nullable<long> value);
     partial void OnNumbersToSellChanged();
     partial void OnSellCommentChanging(string value);
     partial void OnSellCommentChanged();
@@ -326,11 +288,10 @@ namespace Burse.LinqToMSSql
 		
 		public SellOrder()
 		{
-			this._Transactions = new EntitySet<Transaction>(new Action<Transaction>(this.attach_Transactions), new Action<Transaction>(this.detach_Transactions));
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="BigInt NOT NULL", IsPrimaryKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="BigInt NOT NULL", IsPrimaryKey=true, IsDbGenerated=true)]
 		public long Id
 		{
 			get
@@ -350,8 +311,8 @@ namespace Burse.LinqToMSSql
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SellDate", DbType="NChar(10)")]
-		public string SellDate
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SellDate", DbType="DateTimeOffset")]
+		public System.Nullable<System.DateTimeOffset> SellDate
 		{
 			get
 			{
@@ -370,8 +331,8 @@ namespace Burse.LinqToMSSql
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SellPrice", DbType="NChar(10)")]
-		public string SellPrice
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SellPrice", DbType="Decimal(15,2)")]
+		public System.Nullable<decimal> SellPrice
 		{
 			get
 			{
@@ -390,8 +351,8 @@ namespace Burse.LinqToMSSql
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NumbersToSell", DbType="NChar(10)")]
-		public string NumbersToSell
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NumbersToSell", DbType="BigInt")]
+		public System.Nullable<long> NumbersToSell
 		{
 			get
 			{
@@ -410,7 +371,7 @@ namespace Burse.LinqToMSSql
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SellComment", DbType="NChar(10)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SellComment", DbType="NVarChar(4000)")]
 		public string SellComment
 		{
 			get
@@ -427,19 +388,6 @@ namespace Burse.LinqToMSSql
 					this.SendPropertyChanged("SellComment");
 					this.OnSellCommentChanged();
 				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="SellOrder_Transaction", Storage="_Transactions", ThisKey="Id", OtherKey="SellOrder")]
-		public EntitySet<Transaction> Transactions
-		{
-			get
-			{
-				return this._Transactions;
-			}
-			set
-			{
-				this._Transactions.Assign(value);
 			}
 		}
 		
@@ -462,22 +410,10 @@ namespace Burse.LinqToMSSql
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
 			}
 		}
-		
-		private void attach_Transactions(Transaction entity)
-		{
-			this.SendPropertyChanging();
-			entity.SellOrder1 = this;
-		}
-		
-		private void detach_Transactions(Transaction entity)
-		{
-			this.SendPropertyChanging();
-			entity.SellOrder1 = null;
-		}
 	}
 	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.Transactions")]
-	public partial class Transaction : INotifyPropertyChanging, INotifyPropertyChanged
+	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.BurseTransactions")]
+	public partial class BurseTransaction : INotifyPropertyChanging, INotifyPropertyChanged
 	{
 		
 		private static PropertyChangingEventArgs emptyChangingEventArgs = new PropertyChangingEventArgs(String.Empty);
@@ -490,13 +426,13 @@ namespace Burse.LinqToMSSql
 		
 		private System.Nullable<decimal> _TransactionPrice;
 		
-		private System.Nullable<long> _BuyOrder;
+		private System.Nullable<System.DateTimeOffset> _BuyDate;
 		
-		private System.Nullable<long> _SellOrder;
+		private System.Nullable<System.DateTimeOffset> _SellDate;
 		
-		private EntityRef<BuyOrder> _BuyOrder1;
+		private string _BuyComment;
 		
-		private EntityRef<SellOrder> _SellOrder1;
+		private string _SellComment;
 		
     #region Extensibility Method Definitions
     partial void OnLoaded();
@@ -510,20 +446,22 @@ namespace Burse.LinqToMSSql
     partial void OnNumbersToTransactionChanged();
     partial void OnTransactionPriceChanging(System.Nullable<decimal> value);
     partial void OnTransactionPriceChanged();
-    partial void OnBuyOrderChanging(System.Nullable<long> value);
-    partial void OnBuyOrderChanged();
-    partial void OnSellOrderChanging(System.Nullable<long> value);
-    partial void OnSellOrderChanged();
+    partial void OnBuyDateChanging(System.Nullable<System.DateTimeOffset> value);
+    partial void OnBuyDateChanged();
+    partial void OnSellDateChanging(System.Nullable<System.DateTimeOffset> value);
+    partial void OnSellDateChanged();
+    partial void OnBuyCommentChanging(string value);
+    partial void OnBuyCommentChanged();
+    partial void OnSellCommentChanging(string value);
+    partial void OnSellCommentChanged();
     #endregion
 		
-		public Transaction()
+		public BurseTransaction()
 		{
-			this._BuyOrder1 = default(EntityRef<BuyOrder>);
-			this._SellOrder1 = default(EntityRef<SellOrder>);
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", DbType="BigInt NOT NULL", IsPrimaryKey=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Id", AutoSync=AutoSync.OnInsert, DbType="BigInt NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
 		public long Id
 		{
 			get
@@ -583,7 +521,7 @@ namespace Burse.LinqToMSSql
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TransactionPrice", DbType="Decimal(15,15)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TransactionPrice", DbType="Decimal(15,2)")]
 		public System.Nullable<decimal> TransactionPrice
 		{
 			get
@@ -603,118 +541,82 @@ namespace Burse.LinqToMSSql
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BuyOrder", DbType="BigInt")]
-		public System.Nullable<long> BuyOrder
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BuyDate", DbType="DateTimeOffset")]
+		public System.Nullable<System.DateTimeOffset> BuyDate
 		{
 			get
 			{
-				return this._BuyOrder;
+				return this._BuyDate;
 			}
 			set
 			{
-				if ((this._BuyOrder != value))
+				if ((this._BuyDate != value))
 				{
-					if (this._BuyOrder1.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnBuyOrderChanging(value);
+					this.OnBuyDateChanging(value);
 					this.SendPropertyChanging();
-					this._BuyOrder = value;
-					this.SendPropertyChanged("BuyOrder");
-					this.OnBuyOrderChanged();
+					this._BuyDate = value;
+					this.SendPropertyChanged("BuyDate");
+					this.OnBuyDateChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SellOrder", DbType="BigInt")]
-		public System.Nullable<long> SellOrder
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SellDate", DbType="DateTimeOffset")]
+		public System.Nullable<System.DateTimeOffset> SellDate
 		{
 			get
 			{
-				return this._SellOrder;
+				return this._SellDate;
 			}
 			set
 			{
-				if ((this._SellOrder != value))
+				if ((this._SellDate != value))
 				{
-					if (this._SellOrder1.HasLoadedOrAssignedValue)
-					{
-						throw new System.Data.Linq.ForeignKeyReferenceAlreadyHasValueException();
-					}
-					this.OnSellOrderChanging(value);
+					this.OnSellDateChanging(value);
 					this.SendPropertyChanging();
-					this._SellOrder = value;
-					this.SendPropertyChanged("SellOrder");
-					this.OnSellOrderChanged();
+					this._SellDate = value;
+					this.SendPropertyChanged("SellDate");
+					this.OnSellDateChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="BuyOrder_Transaction", Storage="_BuyOrder1", ThisKey="BuyOrder", OtherKey="Id", IsForeignKey=true)]
-		public BuyOrder BuyOrder1
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BuyComment", DbType="NVarChar(4000)")]
+		public string BuyComment
 		{
 			get
 			{
-				return this._BuyOrder1.Entity;
+				return this._BuyComment;
 			}
 			set
 			{
-				BuyOrder previousValue = this._BuyOrder1.Entity;
-				if (((previousValue != value) 
-							|| (this._BuyOrder1.HasLoadedOrAssignedValue == false)))
+				if ((this._BuyComment != value))
 				{
+					this.OnBuyCommentChanging(value);
 					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._BuyOrder1.Entity = null;
-						previousValue.Transactions.Remove(this);
-					}
-					this._BuyOrder1.Entity = value;
-					if ((value != null))
-					{
-						value.Transactions.Add(this);
-						this._BuyOrder = value.Id;
-					}
-					else
-					{
-						this._BuyOrder = default(Nullable<long>);
-					}
-					this.SendPropertyChanged("BuyOrder1");
+					this._BuyComment = value;
+					this.SendPropertyChanged("BuyComment");
+					this.OnBuyCommentChanged();
 				}
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.AssociationAttribute(Name="SellOrder_Transaction", Storage="_SellOrder1", ThisKey="SellOrder", OtherKey="Id", IsForeignKey=true)]
-		public SellOrder SellOrder1
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SellComment", DbType="NVarChar(4000)")]
+		public string SellComment
 		{
 			get
 			{
-				return this._SellOrder1.Entity;
+				return this._SellComment;
 			}
 			set
 			{
-				SellOrder previousValue = this._SellOrder1.Entity;
-				if (((previousValue != value) 
-							|| (this._SellOrder1.HasLoadedOrAssignedValue == false)))
+				if ((this._SellComment != value))
 				{
+					this.OnSellCommentChanging(value);
 					this.SendPropertyChanging();
-					if ((previousValue != null))
-					{
-						this._SellOrder1.Entity = null;
-						previousValue.Transactions.Remove(this);
-					}
-					this._SellOrder1.Entity = value;
-					if ((value != null))
-					{
-						value.Transactions.Add(this);
-						this._SellOrder = value.Id;
-					}
-					else
-					{
-						this._SellOrder = default(Nullable<long>);
-					}
-					this.SendPropertyChanged("SellOrder1");
+					this._SellComment = value;
+					this.SendPropertyChanged("SellComment");
+					this.OnSellCommentChanged();
 				}
 			}
 		}
@@ -736,141 +638,6 @@ namespace Burse.LinqToMSSql
 			if ((this.PropertyChanged != null))
 			{
 				this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
-			}
-		}
-	}
-	
-	[global::System.Data.Linq.Mapping.TableAttribute(Name="dbo.TransactionsOverview_V")]
-	public partial class TransactionsOverview_V
-	{
-		
-		private System.Nullable<System.DateTimeOffset> _CompleteDate;
-		
-		private System.Nullable<decimal> _TransactionPrice;
-		
-		private System.Nullable<long> _NumbersToTransaction;
-		
-		private System.Nullable<System.DateTimeOffset> _BuyDate;
-		
-		private string _BuyComment;
-		
-		private string _SellDate;
-		
-		private string _SellComment;
-		
-		public TransactionsOverview_V()
-		{
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_CompleteDate", DbType="DateTimeOffset")]
-		public System.Nullable<System.DateTimeOffset> CompleteDate
-		{
-			get
-			{
-				return this._CompleteDate;
-			}
-			set
-			{
-				if ((this._CompleteDate != value))
-				{
-					this._CompleteDate = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TransactionPrice", DbType="Decimal(15,15)")]
-		public System.Nullable<decimal> TransactionPrice
-		{
-			get
-			{
-				return this._TransactionPrice;
-			}
-			set
-			{
-				if ((this._TransactionPrice != value))
-				{
-					this._TransactionPrice = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_NumbersToTransaction", DbType="BigInt")]
-		public System.Nullable<long> NumbersToTransaction
-		{
-			get
-			{
-				return this._NumbersToTransaction;
-			}
-			set
-			{
-				if ((this._NumbersToTransaction != value))
-				{
-					this._NumbersToTransaction = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BuyDate", DbType="DateTimeOffset")]
-		public System.Nullable<System.DateTimeOffset> BuyDate
-		{
-			get
-			{
-				return this._BuyDate;
-			}
-			set
-			{
-				if ((this._BuyDate != value))
-				{
-					this._BuyDate = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_BuyComment", DbType="NVarChar(4000)")]
-		public string BuyComment
-		{
-			get
-			{
-				return this._BuyComment;
-			}
-			set
-			{
-				if ((this._BuyComment != value))
-				{
-					this._BuyComment = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SellDate", DbType="NChar(10)")]
-		public string SellDate
-		{
-			get
-			{
-				return this._SellDate;
-			}
-			set
-			{
-				if ((this._SellDate != value))
-				{
-					this._SellDate = value;
-				}
-			}
-		}
-		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_SellComment", DbType="NChar(10)")]
-		public string SellComment
-		{
-			get
-			{
-				return this._SellComment;
-			}
-			set
-			{
-				if ((this._SellComment != value))
-				{
-					this._SellComment = value;
-				}
 			}
 		}
 	}

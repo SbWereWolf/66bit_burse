@@ -1,4 +1,5 @@
 ﻿
+@using Burse.Models
 @model Burse.Models.BurseItemOverview
 
 @{
@@ -29,31 +30,31 @@
 
 <div class="row">
         <div class="col-md-6">
-            @using (Html.BeginForm("AddBuyOrder", "Home", FormMethod.Post, new { @class = "form-horizontal", id = "AddBuyOrder" }))
+            @using (Html.BeginForm("AddBuyOrder", "Home", FormMethod.Post, new { @class = "form-horizontal", id = BurseItemOverview.NameOfAddBuyOrder }))
             {
                 <fieldset>
                     <legend>Разместить ордер на покупку</legend>
                     <div class="form-group">
                         <label class="control-label" for="BuyPrice">Цена </label>
-                        <input type="number" class="form-control" id="BuyPrice" name="BuyPrice" placeholder="в рублях" value ="@Model?.BuyPrice">
+                        <input type="number" class="form-control" id="BuyPrice" name="@BurseItemOverview.NameOfBuyPrice" placeholder="в рублях" value ="@Model?.FieldBuyPrice">
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="NumbersToBuy">Количество </label>
-                        <input type="number" class="form-control" id="NumbersToBuy" name="NumbersToBuy" placeholder="в штуках" value ="@Model?.NumbersToBuy">
+                        <input type="number" class="form-control" id="NumbersToBuy" name="@BurseItemOverview.NameOfNumbersToBuy" placeholder="в штуках" value ="@Model?.FieldAddBuyOrderFieldNumbersToBuy">
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="BuyComment">Комментарий </label>
 @{
     var buyComment = string.Empty;
-    if (!string.IsNullOrWhiteSpace(Model?.BuyComment))
+    if (!string.IsNullOrWhiteSpace(Model?.FieldBuyComment))
     {
-        buyComment = Model.BuyComment;
+        buyComment = Model.FieldBuyComment;
     }
 }
                         
-                        <input type="text" class="form-control" id="BuyComment" name="BuyComment" placeholder="Комментарий к покупке" value ="@buyComment">
+                        <input type="text" class="form-control" id="BuyComment" name="@BurseItemOverview.NameOfBuyComment" placeholder="Комментарий к покупке" value ="@buyComment">
                     </div>
-                    <input type="hidden" name="FieldsetName" value="AddBuyOrder" />
+                    <input type="hidden" name="FieldsetName" value="@BurseItemOverview.NameOfAddBuyOrder" />
                 </fieldset>
                     <div class="form-group">
                         <input type="reset" name="ResetBuyForm" class="btn btn-danger" />
@@ -106,30 +107,30 @@
             }
         </div>
         <div class="col-md-6">
-            @using (Html.BeginForm("AddSellOrder", "Home", FormMethod.Post, new { @class = "form-horizontal", id = "AddSellOrder" }))
+            @using (Html.BeginForm("AddSellOrder", "Home", FormMethod.Post, new { @class = "form-horizontal", id = BurseItemOverview.NameOfAddSellOrder }))
             {
                 <fieldset>
                     <legend>Разместить ордер на продажу</legend>
                     <div class="form-group">
                         <label class="control-label" for="SellPrice">Цена </label>
-                        <input type="number" class="form-control" id="SellPrice" name="SellPrice" placeholder="в рублях" value ="@Model?.SellPrice">
+                        <input type="number" class="form-control" id="SellPrice" name="@BurseItemOverview.NameOfSellPrice" placeholder="в рублях" value ="@Model?.FieldSellPrice">
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="NumbersToSell">Количество </label>
-                        <input type="number" class="form-control" id="NumbersToSell" name="NumbersToSell" placeholder="в штуках" value ="@Model?.NumbersToSell">
+                        <input type="number" class="form-control" id="NumbersToSell" name="@BurseItemOverview.NameOfNumbersToSell" placeholder="в штуках" value ="@Model?.FieldNumbersToSell">
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="SellComment">Комментарий </label>
 @{
     var sellComment = string.Empty;
-    if (!string.IsNullOrWhiteSpace(Model?.SellComment))
+    if (!string.IsNullOrWhiteSpace(Model?.FieldSellComment))
     {
-        sellComment = Model.SellComment;
+        sellComment = Model.FieldSellComment;
     }
 }
-                        <input type="text" class="form-control" id="SellComment" name="SellComment" placeholder="Комментарий к продаже" value ="@sellComment">
+                        <input type="text" class="form-control" id="SellComment" name="@BurseItemOverview.NameOfSellComment" placeholder="Комментарий к продаже" value ="@sellComment">
                     </div>
-                    <input type="hidden" name="FieldsetName" value="AddSellOrder"/>
+                    <input type="hidden" name="FieldsetName" value="@BurseItemOverview.NameOfAddSellOrder"/>
                 </fieldset>
                     <div class="form-group">
                         <input type="reset" name="ResetSellForm" class="btn btn-danger" />

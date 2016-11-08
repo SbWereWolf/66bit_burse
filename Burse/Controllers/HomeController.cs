@@ -17,6 +17,7 @@ namespace Burse.Controllers
         {
             var requestForm = Request?.Form;
             var overview = new Models.BurseItemOverview(requestForm);
+            overview.AddBuyOrder();
             var result = RedirectToAction("Index", "Home");
             return result;
         }
@@ -24,6 +25,7 @@ namespace Burse.Controllers
         {
             var requestForm = Request?.Form;
             var overview = new Models.BurseItemOverview(requestForm);
+            overview.AddSellOrder();
             var result = RedirectToAction("Index", "Home");
             return result;
         }
