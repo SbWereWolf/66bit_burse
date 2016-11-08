@@ -6,17 +6,26 @@ namespace Burse.Controllers
     {
         public ActionResult Index()
         {
-            var overview = new Models.BurseItemOverview {EventMessage = "Страница загружена"};
+            var requestForm = Request?.Form;
+            var overview = new Models.BurseItemOverview(requestForm) ;
+            overview.Boot();
+
             var result = View(overview);
             return result;
         }
         public ActionResult AddBuyOrder()
         {
+            var requestForm = Request?.Form;
+            var overview = new Models.BurseItemOverview(requestForm);
+            overview.AddBuyOrder();
             var result = RedirectToAction("Index", "Home");
             return result;
         }
         public ActionResult AddSellOrder()
         {
+            var requestForm = Request?.Form;
+            var overview = new Models.BurseItemOverview(requestForm);
+            overview.AddSellOrder();
             var result = RedirectToAction("Index", "Home");
             return result;
         }
