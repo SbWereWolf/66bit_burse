@@ -1,0 +1,44 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="BurseMSSql">
+  <DataContextMoniker Name="/BurseMSSqlDataContext" />
+  <nestedChildShapes>
+    <classShape Id="16456425-28c5-4979-8cfd-1b725b0bd414" absoluteBounds="3.375, 2.75, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/BurseMSSqlDataContext/BuyOrder" />
+      <nestedChildShapes>
+        <elementListCompartment Id="ef6c2a49-baae-41c7-872a-991011d09e18" absoluteBounds="3.3899999999999997, 3.21, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="7b326d3e-a5d7-4615-b366-2ec845876c82" absoluteBounds="3.25, 0.5, 2, 1.7708968098958331">
+      <DataClassMoniker Name="/BurseMSSqlDataContext/SellOrder" />
+      <nestedChildShapes>
+        <elementListCompartment Id="c8597831-330d-45cb-bd23-c04e36324eef" absoluteBounds="3.2649999999999997, 0.96, 1.9700000000000002, 1.2108968098958333" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="bcbd64ce-0592-42ba-b6d6-45314f8049b3" absoluteBounds="6.375, 1.625, 2, 1.9631982421875">
+      <DataClassMoniker Name="/BurseMSSqlDataContext/Transaction" />
+      <nestedChildShapes>
+        <elementListCompartment Id="84a88f5e-94ee-4e22-8aa6-2a5a065f7223" absoluteBounds="6.39, 2.085, 1.9700000000000002, 1.4031982421875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <associationConnector edgePoints="[(5.375 : 3.16909912109375); (6.375 : 3.16909912109375)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/BurseMSSqlDataContext/BuyOrder/BuyOrder_Transaction" />
+      <nodes>
+        <classShapeMoniker Id="16456425-28c5-4979-8cfd-1b725b0bd414" />
+        <classShapeMoniker Id="bcbd64ce-0592-42ba-b6d6-45314f8049b3" />
+      </nodes>
+    </associationConnector>
+    <associationConnector edgePoints="[(5.25 : 1.94794840494792); (6.375 : 1.94794840494792)]" fixedFrom="Algorithm" fixedTo="Algorithm">
+      <AssociationMoniker Name="/BurseMSSqlDataContext/SellOrder/SellOrder_Transaction" />
+      <nodes>
+        <classShapeMoniker Id="7b326d3e-a5d7-4615-b366-2ec845876c82" />
+        <classShapeMoniker Id="bcbd64ce-0592-42ba-b6d6-45314f8049b3" />
+      </nodes>
+    </associationConnector>
+    <classShape Id="03817d94-9551-462f-b0d0-766f3a7cf756" absoluteBounds="3.375, 4.875, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/BurseMSSqlDataContext/TransactionsOverview_V" />
+      <nestedChildShapes>
+        <elementListCompartment Id="7ec6d64f-f651-4055-aa7d-f43da9a8bd84" absoluteBounds="3.3900000000000006, 5.335, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

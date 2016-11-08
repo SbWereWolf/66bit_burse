@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using DataAccessLayer;
 
-namespace Burse.Models
+namespace BusinessLogicLayer
 {
     public class BuyOrder
     {
