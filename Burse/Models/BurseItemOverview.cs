@@ -1,29 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Globalization;
 using BusinessLogicLayer;
 
 namespace Burse.Models
 {
     public class BurseItemOverview
     {
-        public static string NameOfBuyPrice { get; } = "BuyPrice";
-        public static string NameOfNumbersToBuy { get; } = "NumbersToBuy";
-        public static string NameOfBuyComment { get; } = "BuyComment";
-        public static string NameOfAddBuyOrder { get; } = "AddBuyOrder";
-        public static string NameOfSellPrice { get; } = "SellPrice";
-        public static string NameOfNumbersToSell { get; } = "NumbersToSell";
-        public static string NameOfSellComment { get; } = "SellComment";
-        public static string NameOfAddSellOrder { get; } = "AddSellOrder";
+        public static string NameOfBuyPrice { get; } = "FieldBuyPrice";
+        public static string NameOfNumbersToBuy { get; } = "FieldNumbersToBuy";
+        public static string NameOfBuyComment { get; } = "FieldBuyComment";
+        public static string NameOfAddBuyOrder { get; } = "FieldAddBuyOrder";
+        public static string NameOfSellPrice { get; } = "FieldSellPrice";
+        public static string NameOfNumbersToSell { get; } = "FieldNumbersToSell";
+        public static string NameOfSellComment { get; } = "FieldSellComment";
+        public static string NameOfAddSellOrder { get; } = "FieldAddSellOrder";
 
-        public string BuyPrice { get; set; }
-        public  string NumbersToBuy { get; set; }
-        public  string BuyComment { get; set; }
-        public  string AddBuyOrder { get; set; }
-        public  string SellPrice { get; set; }
-        public  string NumbersToSell { get; set; }
-        public  string SellComment { get; set; }
-        public  string AddSellOrder { get; set; }
+        public string FieldBuyPrice { get; set; }
+        public  string FieldNumbersToBuy { get; set; }
+        public  string FieldBuyComment { get; set; }
+        public  string FieldAddBuyOrder { get; set; }
+        public  string FieldSellPrice { get; set; }
+        public  string FieldNumbersToSell { get; set; }
+        public  string FieldSellComment { get; set; }
+        public  string FieldAddSellOrder { get; set; }
 
 
         public BurseTransaction[] BurseTransactions { get; set; }
@@ -37,14 +38,14 @@ namespace Burse.Models
 
             if (requestForm != null )
             {
-                BuyPrice = requestForm[NameOfBuyPrice];
-                NumbersToBuy = requestForm[NameOfNumbersToBuy]; 
-                BuyComment = requestForm[NameOfBuyComment];
-                AddBuyOrder = requestForm[NameOfAddBuyOrder];
-                SellPrice = requestForm[NameOfSellPrice];
-                NumbersToSell = requestForm[NameOfNumbersToSell];
-                SellComment = requestForm[NameOfSellComment];
-                AddSellOrder = requestForm[NameOfAddSellOrder];
+                FieldBuyPrice = requestForm[NameOfBuyPrice];
+                FieldNumbersToBuy = requestForm[NameOfNumbersToBuy]; 
+                FieldBuyComment = requestForm[NameOfBuyComment];
+                FieldAddBuyOrder = requestForm[NameOfAddBuyOrder];
+                FieldSellPrice = requestForm[NameOfSellPrice];
+                FieldNumbersToSell = requestForm[NameOfNumbersToSell];
+                FieldSellComment = requestForm[NameOfSellComment];
+                FieldAddSellOrder = requestForm[NameOfAddSellOrder];
             }
 
 
@@ -57,7 +58,6 @@ namespace Burse.Models
                 BuyComment = "WTB !!",
                 CompleteDate = new DateTime(42,01,23,0,0,6),
                 BuyDate = new DateTime(42, 01, 22,23,45,56),
-                Id = 1,
                 NumbersToTransaction = 12,
                 SellComment = "wts",
                 SellDate = new DateTime(42, 01, 22,23,59,59),
@@ -87,7 +87,6 @@ namespace Burse.Models
                 BuyComment = "WTB !!",
                 CompleteDate = new DateTime(42, 01, 23, 0, 0, 6),
                 BuyDate = new DateTime(42, 01, 22, 23, 45, 56),
-                Id = 1,
                 NumbersToTransaction = 12,
                 SellComment = "wts",
                 SellDate = new DateTime(42, 01, 22, 23, 59, 59),
@@ -118,7 +117,6 @@ namespace Burse.Models
                 BuyComment = "WTB !!",
                 CompleteDate = new DateTime(42, 01, 23, 0, 0, 6),
                 BuyDate = new DateTime(42, 01, 22, 23, 45, 56),
-                Id = 1,
                 NumbersToTransaction = 12,
                 SellComment = "wts",
                 SellDate = new DateTime(42, 01, 22, 23, 59, 59),
@@ -148,7 +146,6 @@ namespace Burse.Models
                 BuyComment = "WTB !!",
                 CompleteDate = new DateTime(42, 01, 23, 0, 0, 6),
                 BuyDate = new DateTime(42, 01, 22, 23, 45, 56),
-                Id = 1,
                 NumbersToTransaction = 12,
                 SellComment = "wts",
                 SellDate = new DateTime(42, 01, 22, 23, 59, 59),
@@ -178,7 +175,6 @@ namespace Burse.Models
                 BuyComment = "WTB !!",
                 CompleteDate = new DateTime(42, 01, 23, 0, 0, 6),
                 BuyDate = new DateTime(42, 01, 22, 23, 45, 56),
-                Id = 1,
                 NumbersToTransaction = 12,
                 SellComment = "wts",
                 SellDate = new DateTime(42, 01, 22, 23, 59, 59),
@@ -232,7 +228,55 @@ namespace Burse.Models
             BurseTransactions = BurseTransaction.LoadAll();
             BuyOrders = BuyOrder.LoadAll();
             SellOrders = SellOrder.LoadAll();
+        }
 
+        public void AddBuyOrder()
+        {
+            var isAddBuyOrder = !string.IsNullOrWhiteSpace(FieldAddBuyOrder);
+            if (isAddBuyOrder)
+            {
+                var buyOrder = new BuyOrder
+                {
+                    BuyComment = FieldBuyComment
+                };
+
+                decimal fieldBuyPrice;
+                var isSuccess = decimal.TryParse(FieldBuyPrice,NumberStyles.Float,CultureInfo.InvariantCulture,out fieldBuyPrice);
+                buyOrder.BuyPrice = isSuccess ? fieldBuyPrice : (decimal?)null ;
+
+                long numbersToBuy;
+                isSuccess = long.TryParse(FieldNumbersToBuy, NumberStyles.Integer,CultureInfo.InvariantCulture,out numbersToBuy);
+                buyOrder.NumbersToBuy = isSuccess ? numbersToBuy : (long?) null;
+
+                if (fieldBuyPrice != 0 && numbersToBuy != 0 )
+                {
+                    buyOrder.Buy();
+                }
+            }
+        }
+        public void AddSellOrder()
+        {
+            var isAddSellOrder = !string.IsNullOrWhiteSpace(FieldAddSellOrder);
+            if (isAddSellOrder)
+            {
+                var sellOrder = new SellOrder
+                {
+                    SellComment = FieldSellComment
+                };
+
+                decimal fieldSellPrice;
+                var isSuccess = decimal.TryParse(FieldSellPrice, NumberStyles.Float, CultureInfo.InvariantCulture, out fieldSellPrice);
+                sellOrder.SellPrice = isSuccess ? fieldSellPrice : (decimal?)null;
+
+                long numbersToSell;
+                isSuccess = long.TryParse(FieldNumbersToSell, NumberStyles.Integer, CultureInfo.InvariantCulture, out numbersToSell);
+                sellOrder.NumbersToSell = isSuccess ? numbersToSell : (long?)null;
+
+                if(fieldSellPrice != 0 && numbersToSell != 0)
+                {
+                    sellOrder.Sell();
+                }
+            }
         }
     }
 }

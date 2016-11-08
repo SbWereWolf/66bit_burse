@@ -40,6 +40,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Transaction.cs" />
     <Compile Include="BurseTransaction.cs" />
     <Compile Include="BuyOrder.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

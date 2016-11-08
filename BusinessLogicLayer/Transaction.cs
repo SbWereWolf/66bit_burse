@@ -4,17 +4,17 @@ using DataAccessLayer;
 
 namespace BusinessLogicLayer
 {
-    public class BurseTransaction
+    public class Transaction
     {
         public DateTimeOffset? CompleteDate { get; set; }
-        public DateTimeOffset? BuyDate { get; set; }
-        public DateTimeOffset? SellDate { get; set; }
         public decimal? TransactionPrice { get; set; }
         public long? NumbersToTransaction { get; set; }
+        public DateTimeOffset? BuyDate { get; set; }
+        public DateTimeOffset? SellDate { get; set; }
         public string BuyComment { get; set; }
         public string SellComment { get; set; }
 
-        public BurseTransaction()
+        public Transaction()
         {
             Reset();
         }
@@ -24,13 +24,13 @@ namespace BusinessLogicLayer
             CompleteDate = null;
             NumbersToTransaction = null;
             TransactionPrice = null;
-            BuyComment = null;
             BuyDate = null;
-            SellComment = null;
             SellDate = null;
+            BuyComment = null;
+            SellComment = null;
         }
 
-        public BurseTransaction(BurseTransactions record)
+        public Transaction(TransactionsRecords record)
         {
             if (record == null)
             {
@@ -41,27 +41,42 @@ namespace BusinessLogicLayer
                 CompleteDate = record.CompleteDate;
                 NumbersToTransaction = record.NumbersToTransaction;
                 TransactionPrice = record.TransactionPrice;
-                BuyComment = record.BuyComment;
                 BuyDate = record.BuyDate;
-                SellComment = record.SellComment;
                 SellDate = record.SellDate;
+                BuyComment = record.BuyComment;
+                SellComment = record.SellComment;
             }
         }
 
-        public static BurseTransaction[] LoadAll()
+        public static Transaction[] LoadAll()
         {
-            var transactions = BurseTransactions.FindAll();
+            var transactions = TransactionsRecords.FindAll();
 
-            var transactionList = new List<BurseTransaction>();
+            var transactionList = new List<Transaction>();
             if (transactions != null)
                 foreach (var record in transactions)
                 {
-                    var transaction = new BurseTransaction(record);
+                    var transaction = new Transaction(record);
                     transactionList.Add(transaction);
                 }
 
             var result = transactionList.ToArray();
             return result;
+        }
+        public void Add()
+        {
+            var newDeal = new TransactionsRecords
+            {
+                CompleteDate = DateTimeOffset.Now,
+                NumbersToTransaction = NumbersToTransaction,
+                TransactionPrice = TransactionPrice,
+                BuyDate = BuyDate,
+                SellDate = SellDate,
+                BuyComment = BuyComment,
+                SellComment = SellComment,
+            };
+
+            newDeal.Insert();
         }
     }
 }
