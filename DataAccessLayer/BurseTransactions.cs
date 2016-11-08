@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Burse.Models
+namespace DataAccessLayer
 {
-    public class Transaction
+    public class BurseTransactions
     {
         public long Id { get; set; }
         public DateTime CompleteDate { get; set; }
@@ -12,5 +12,10 @@ namespace Burse.Models
         public long NumbersToTransaction { get; set; }
         public string BuyComment { get; set; }
         public string SellComment { get; set; }
+
+        public static BurseTransactions[] FindAll()
+        {
+            return null;
+        }
     }
 }
