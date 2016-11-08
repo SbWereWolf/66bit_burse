@@ -77,5 +77,58 @@ namespace DataAccessLayer
 
             Id = buyOrder.Id;
         }
+
+        public bool Update()
+        {
+            BuyOrder cache = null;
+            if (Id.HasValue)
+            {
+                cache = Repository?.BuyOrders?.FirstOrDefault(x => x.Id == Id.Value);
+            }
+
+            var result = false;
+            if (cache != null)
+            {
+                cache.Id = Id.Value;
+                cache.NumbersToBuy = NumbersToBuy;
+                cache.BuyPrice = BuyPrice;
+                cache.BuyComment = BuyComment;
+                cache.BuyDate = BuyDate;
+
+                try
+                {
+                    Repository?.SubmitChanges();
+                    result = true;
+                }
+                catch (Exception)
+                {
+                    //throw;
+                }
+            }
+            return result;
+        }
+
+        public BuyOrders[] GetWithPriceLessOrEqual()
+        {
+            var buyOrders = Repository?.BuyOrders?.Where(x => x.BuyPrice >= BuyPrice && x.NumbersToBuy > 0).OrderBy(x => x.BuyPrice).ThenBy(x => x.NumbersToBuy).ToArray();
+
+            var buyOrderArray = RecordToEntityCollection(buyOrders);
+
+            return buyOrderArray;
+        }
+
+        private BuyOrders[] RecordToEntityCollection(BuyOrder[] buyOrders)
+        {
+            var buyOrdersRecordsList = new List<BuyOrders>();
+            if (buyOrders != null)
+                foreach (var order in buyOrders)
+                {
+                    var buyOrdersRecords = new BuyOrders(order);
+                    buyOrdersRecordsList.Add(buyOrdersRecords);
+                }
+
+            var result = buyOrdersRecordsList.ToArray();
+            return result;
+        }
     }
 }

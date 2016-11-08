@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using DataAccessLayer;
 
@@ -115,6 +116,42 @@ namespace BusinessLogicLayer
             };
 
             newOrder.Insert();
+        }
+
+        public static BuyOrder[] GetWithPriceGreaterOrEqual(decimal? sellPrice)
+        {
+            var buyOrders = new BuyOrders { BuyPrice = sellPrice };
+            var ordersWithPriceGreaterOrEqual = buyOrders.GetWithPriceLessOrEqual();
+
+            var result = EntitiesToLogicUnit(ordersWithPriceGreaterOrEqual);
+            return result;
+        }
+
+        private static BuyOrder[] EntitiesToLogicUnit(BuyOrders[] buyOrders)
+        {
+            var buyOrdersList = new List<BuyOrder>();
+            if (buyOrders != null)
+                foreach (var order in buyOrders)
+                {
+                    var buyOrder = new BuyOrder(order);
+                    buyOrdersList.Add(buyOrder);
+                }
+
+            var result = buyOrdersList.ToArray();
+            return result;
+        }
+
+        public void Save()
+        {
+            var instance = new BuyOrders
+            {
+                BuyPrice = BuyPrice,
+                Id = Id,
+                NumbersToBuy = NumbersToBuy,
+                BuyComment = BuyComment,
+                BuyDate = BuyDate
+            };
+            instance.Update();
         }
     }
 }

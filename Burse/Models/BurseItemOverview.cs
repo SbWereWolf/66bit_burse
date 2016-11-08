@@ -232,7 +232,7 @@ namespace Burse.Models
 
         public void AddBuyOrder()
         {
-            var isAddBuyOrder = string.IsNullOrWhiteSpace(FieldAddBuyOrder);
+            var isAddBuyOrder = !string.IsNullOrWhiteSpace(FieldAddBuyOrder);
             if (isAddBuyOrder)
             {
                 var buyOrder = new BuyOrder
@@ -256,7 +256,7 @@ namespace Burse.Models
         }
         public void AddSellOrder()
         {
-            var isAddSellOrder = string.IsNullOrWhiteSpace(FieldAddSellOrder);
+            var isAddSellOrder = !string.IsNullOrWhiteSpace(FieldAddSellOrder);
             if (isAddSellOrder)
             {
                 var sellOrder = new SellOrder
@@ -274,7 +274,7 @@ namespace Burse.Models
 
                 if(fieldSellPrice != 0 && numbersToSell != 0)
                 {
-                    sellOrder.Add();
+                    sellOrder.Sell();
                 }
             }
         }

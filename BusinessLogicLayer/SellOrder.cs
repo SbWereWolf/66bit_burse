@@ -65,7 +65,53 @@ namespace BusinessLogicLayer
             return result;
         }
 
-        public void Add()
+        public void Sell()
+        {
+
+            SellDate = DateTimeOffset.Now;
+
+            var buyOrders = BuyOrder.GetWithPriceGreaterOrEqual(SellPrice);
+            if (buyOrders != null)
+            {
+                foreach (var buyOrder in buyOrders)
+                {
+                    var numbersToSell = NumbersToSell;
+
+                    if (buyOrder != null && numbersToSell > 0)
+                    {
+                        var numbersToBuy = buyOrder.NumbersToBuy;
+
+                        var numbersToTransaction = numbersToSell < numbersToBuy ? numbersToSell : numbersToBuy;
+                        numbersToSell -= numbersToTransaction;
+                        numbersToBuy -= numbersToTransaction;
+
+                        var transaction = new Transaction
+                        {
+                            BuyDate = buyOrder.BuyDate,
+                            SellDate = SellDate,
+                            BuyComment = buyOrder.BuyComment,
+                            SellComment = SellComment,
+                            CompleteDate = DateTimeOffset.Now,
+                            NumbersToTransaction = numbersToTransaction,
+                            TransactionPrice = SellPrice
+                        };
+                        transaction.Add();
+
+                        NumbersToSell = numbersToSell;
+                        buyOrder.NumbersToBuy = numbersToBuy;
+
+                        buyOrder.Save();
+                    }
+                }
+            }
+
+            if (NumbersToSell > 0)
+            {
+                Add();
+            }
+        }
+
+        private void Add()
         {
             var newOrder = new SellOrders
             {
