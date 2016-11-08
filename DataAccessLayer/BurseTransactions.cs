@@ -2,7 +2,7 @@
 
 namespace DataAccessLayer
 {
-    public class BurseTransactions
+    public class BurseTransactions : MSSqlRepository
     {
         public long Id { get; set; }
         public DateTime CompleteDate { get; set; }

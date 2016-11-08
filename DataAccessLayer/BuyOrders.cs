@@ -2,7 +2,7 @@
 
 namespace DataAccessLayer
 {
-    public class BuyOrders
+    public class BuyOrders : MSSqlRepository
     {
         public long Id { get; set; }
         public DateTime BuyDate { get; set; }
