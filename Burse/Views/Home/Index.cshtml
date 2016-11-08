@@ -9,24 +9,25 @@
 }
 
 <div class="container">
-    <div class="row">
-        @if (Model != null)
-        {
-            <div class="panel panel-primary text-center">
-                <div class="panel-heading">
-                    <h3 class="panel-title">
-                        Сообщение
-                    </h3>
-                </div>
 
-                <div class="panel-body">
-                    @Model.EventMessage
-                </div>
+@if (!string.IsNullOrWhiteSpace(Model?.EventMessage))
+{
+    <div class="row">
+        <div class="panel panel-primary text-center">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Сообщение
+                </h3>
             </div>
 
-        }
+            <div class="panel-body">
+                @Model.EventMessage
+            </div>
+        </div>
     </div>
-    <div class="row">
+                    }
+
+<div class="row">
         <div class="col-md-6">
             @using (Html.BeginForm("AddBuyOrder", "Home", FormMethod.Post, new { @class = "form-horizontal", id = "AddBuyOrder" }))
             {
@@ -34,16 +35,25 @@
                     <legend>Разместить ордер на покупку</legend>
                     <div class="form-group">
                         <label class="control-label" for="BuyPrice">Цена </label>
-                        <input type="number" class="form-control" id="BuyPrice" placeholder="в рублях">
+                        <input type="number" class="form-control" id="BuyPrice" name="BuyPrice" placeholder="в рублях" value ="@Model?.BuyPrice">
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="NumbersToBuy">Количество </label>
-                        <input type="number" class="form-control" id="NumbersToBuy" placeholder="в штуках">
+                        <input type="number" class="form-control" id="NumbersToBuy" name="NumbersToBuy" placeholder="в штуках" value ="@Model?.NumbersToBuy">
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="BuyComment">Комментарий </label>
-                        <input type="text" class="form-control" id="BuyComment" placeholder="Комментарий к покупке">
+@{
+    var buyComment = string.Empty;
+    if (!string.IsNullOrWhiteSpace(Model?.BuyComment))
+    {
+        buyComment = Model.BuyComment;
+    }
+}
+                        
+                        <input type="text" class="form-control" id="BuyComment" name="BuyComment" placeholder="Комментарий к покупке" value ="@buyComment">
                     </div>
+                    <input type="hidden" name="FieldsetName" value="AddBuyOrder" />
                 </fieldset>
                     <div class="form-group">
                         <input type="reset" name="ResetBuyForm" class="btn btn-danger" />
@@ -102,16 +112,24 @@
                     <legend>Разместить ордер на продажу</legend>
                     <div class="form-group">
                         <label class="control-label" for="SellPrice">Цена </label>
-                        <input type="number" class="form-control" id="SellPrice" placeholder="в рублях">
+                        <input type="number" class="form-control" id="SellPrice" name="SellPrice" placeholder="в рублях" value ="@Model?.SellPrice">
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="NumbersToSell">Количество </label>
-                        <input type="number" class="form-control" id="NumbersToSell" placeholder="в штуках">
+                        <input type="number" class="form-control" id="NumbersToSell" name="NumbersToSell" placeholder="в штуках" value ="@Model?.NumbersToSell">
                     </div>
                     <div class="form-group">
                         <label class="control-label" for="SellComment">Комментарий </label>
-                        <input type="text" class="form-control" id="SellComment" placeholder="Комментарий к продаже">
+@{
+    var sellComment = string.Empty;
+    if (!string.IsNullOrWhiteSpace(Model?.SellComment))
+    {
+        sellComment = Model.SellComment;
+    }
+}
+                        <input type="text" class="form-control" id="SellComment" name="SellComment" placeholder="Комментарий к продаже" value ="@sellComment">
                     </div>
+                    <input type="hidden" name="FieldsetName" value="AddSellOrder"/>
                 </fieldset>
                     <div class="form-group">
                         <input type="reset" name="ResetSellForm" class="btn btn-danger" />
@@ -194,9 +212,9 @@
 
             </thead>
             <tbody>
-                @if (Model?.Transactions != null)
+                @if (Model?.BurseTransactions != null)
                 {
-                    foreach (var record in Model.Transactions)
+                    foreach (var record in Model.BurseTransactions)
                     {
                         if (record == null)
                         {
